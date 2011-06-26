@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>nilestore-parent-pom</artifactId>
+		<groupId>eg.nileu.cis.nilestore</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>eg.nileu.cis.nilestore.introducer</groupId>
+	<artifactId>nilestore-introducer</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>nilestore-introducer</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>se.sics.kompics.basic</groupId>
+			<artifactId>kompics-component-jetty-web-server</artifactId>
+			<version>0.4.3</version>
+		</dependency>
+	</dependencies>
+	<modules>
+		<module>nilestore-introducer-port</module>
+		<module>nilestore-introducer-server</module>
+	</modules>
+</project>

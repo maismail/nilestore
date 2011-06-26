@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>nilestore-peer</artifactId>
+		<groupId>eg.nileu.cis.nilestore</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>eg.nileu.cis.nilestore</groupId>
+	<artifactId>nilestore-peer-main</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>nilestore-peer-main</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-remote-resources-plugin</artifactId>
+				<version>1.2</version>
+				<configuration>
+					<resourceBundles>
+						<resourceBundle>eg.nileu.cis.nilestore:nilestore-web-sharedresources:${project.version}</resourceBundle>
+					</resourceBundles>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>process</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>eg.nileu.cis.nilestore</groupId>
+			<artifactId>nilestore-peer-cmp</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>eg.nileu.cis.nilestore.webserver.jetty</groupId>
+			<artifactId>nilestore-webserver-jetty</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>se.sics.kompics.basic</groupId>
+			<artifactId>kompics-component-java-timer</artifactId>
+			<version>0.4.3</version>
+		</dependency>
+		<dependency>
+			<groupId>se.sics.kompics.basic</groupId>
+			<artifactId>kompics-component-mina-network</artifactId>
+			<version>0.4.3</version>
+		</dependency>
+		<!-- netty isn't released yet -->
+		<dependency>
+			<groupId>se.sics.kompics.basic</groupId>
+			<artifactId>kompics-component-netty-network</artifactId>
+			<version>0.4.4</version>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="language" content="en">
+<title>Nilestore Simulator</title>
+
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+<link rel="stylesheet" type="text/css" href="jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="layout-default.css">
+<link rel="stylesheet" type="text/css" href="jquery.fileupload-ui.css">
+<link rel="stylesheet" type="text/css" href="jquery.treeTable.css">
+<link rel="stylesheet" type="text/css" href="table.css">
+
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jquery-ui.js"></script>
+<script type="text/javascript" src="jquery.layout.js"></script>
+<script type="text/javascript" src="jquery.fileupload.js"></script>
+<script type="text/javascript" src="jquery.fileupload-ui.js"></script>
+<script type="text/javascript" src="jquery.treeTable.js"></script>
+<script type="text/javascript" src="jquery.scrollTo.js"></script>
+<script type="text/javascript" src="protovis.js"></script>
+<script type="text/javascript" src="simulator.js"></script>
+<script type="text/javascript" src="monitor.js"></script>
+
+<style>
+.dialog-label {
+	color: #0073ea;
+}
+</style>
+<script type="text/javascript">
+	$(document).ready(function () {
+		init();
+	});
+	</script>
+</head>
+<body>
+
+<div class="ui-layout-center">
+
+<div id="nodePane">
+
+<ul>
+	<li><a href="#uploadTab">Upload</a></li>
+	<li><a href="#myStoreTab">myStore</a></li>
+	<li><a href="#storageTab" id="storageTabA">Storage</a></li>
+</ul>
+
+<div id="uploadTab">
+<h4>Nilestore Uploader</h4>
+<form id="file_upload" action="/upload" method="POST"
+	enctype="multipart/form-data"><input type="file" name="File"
+	multiple> <input type="hidden" id="destId" name="dest"
+	value="1">
+<button>Upload</button>
+<div class="file_upload_label">Upload file</div>
+</form>
+
+<table id="files"></table>
+
+<div id="uploadResults"></div>
+
+</div>
+
+<div id="myStoreTab">
+
+<div id="myStoreDiv"></div>
+
+</div>
+
+<div id="storageTab">
+
+<div id="storageDiv">
+
+<table id="storageTable" class="ft-table">
+	<thead class="ft-thead">
+		<th>Storage Index</th>
+		<th>Size (KB)</th>
+		<th>Operation</th>
+	</thead>
+
+	<tbody class="ft-tbody" id="storageTablebody">
+
+	</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="monitorPane">
+
+<ul>
+	<li><a href="#currentViewtab">CurrentView</a></li>
+	<li><a href="#groupedViewtab">GroupedView</a></li>
+</ul>
+
+<div id="currentViewtab">
+
+<div id="currentView"></div>
+
+</div>
+
+<div id="groupedViewtab">
+
+<div id="groupedView"></div>
+
+</div>
+
+</div>
+
+<div id="introducerPane">This is introducer pane</div>
+
+</div>
+
+<div class="ui-layout-north">
+
+<div id="nstoolbar"><span id="toolbar"
+	class="ui-widget-header ui-corner-all">
+
+<button id="createNetwork">Create Network</button>
+<button id="runNetwork">Run</button>
+
+<span id="nodetype"> <input type="radio" id="nodesRadio"
+	name="nodetype" checked="checked" /><label for="nodesRadio">Nodes</label>
+<input type="radio" id="monitorRadio" name="nodetype" /><label
+	for="monitorRadio">Monitor</label> <input type="radio"
+	id="introducerRadio" name="nodetype" /><label for="introducerRadio">Introducer</label>
+</span> </span></div>
+
+</div>
+
+<div class="ui-layout-east">
+
+<div id="loggerRadio"></div>
+
+<div id="currentNode"></div>
+<div id="logger"></div>
+
+</div>
+
+<div class="ui-layout-west">
+
+<div id="nodesWestDiv"></div>
+
+<div id="monitorWestDiv"></div>
+
+<div id="introducerWestDiv"></div>
+
+</div>
+
+
+<div id="createDialog" title="Create Network">
+
+<form>
+<fieldset style=""><legend><b>Num of Nodes:</b></legend> <label
+	for="totalnodes" class="dialog-label"><b>Total Nodes</b></label> <input
+	type="text" name="totalnodes" id="totalnodes" size="5" maxlength="2"
+	class="text ui-widget-content ui-corner-all" /> <label
+	for="storagenodes" class="dialog-label"><b>Storage Nodes</b></label> <input
+	type="text" name="storagenodes" id="storagenodes" size="5"
+	maxlength="2" class="text ui-widget-content ui-corner-all" /></fieldset>
+
+
+<fieldset><legend><b>Encoding Parameters:</b></legend> <label
+	for="k" class="dialog-label"><b>K</b></label> <input type="text"
+	name="k" id="k" size="5" maxlength="2"
+	class="text ui-widget-content ui-corner-all" /> <label for="n"
+	class="dialog-label"><b>N</b></label> <input type="text" name="n"
+	id="n" size="5" maxlength="2"
+	class="text ui-widget-content ui-corner-all" /></fieldset>
+
+<fieldset><legend><b>Overlay:</b></legend> <span
+	id="ovelaytype"> <input type="radio" id="ceneralizedRadio"
+	name="ovelaytype" checked="checked" /><label for="ceneralizedRadio">Ceneralized</label>
+<input type="radio" id="deceneralizedRadio" name="ovelaytype" /><label
+	for="deceneralizedRadio">Decentralized</label> </span></fieldset>
+
+</form>
+
+</div>
+
+</body>
+</html>

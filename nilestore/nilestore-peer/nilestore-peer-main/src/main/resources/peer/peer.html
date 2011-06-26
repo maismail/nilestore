@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="language" content="en">
+<title>Nilestore Peer</title>
+
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+<link rel="stylesheet" type="text/css" href="jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="jquery.fileupload-ui.css">
+<link rel="stylesheet" type="text/css" href="jquery.treeTable.css">
+<link rel="stylesheet" type="text/css" href="table.css">
+
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jquery-ui.js"></script>
+<script type="text/javascript" src="jquery.fileupload.js"></script>
+<script type="text/javascript" src="jquery.fileupload-ui.js"></script>
+<script type="text/javascript" src="jquery.treeTable.js"></script>
+<script type="text/javascript" src="peer.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		init();
+	});
+	</script>
+
+<style>
+body {
+	font-size: 80%;
+	background: #ffffff;
+}
+
+.title {
+	color: blue;
+	text-align: center;
+}
+
+.mainTabs {
+	position: absolute;
+	top: 60px;
+	left: 200px;
+	right: 200px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="title">
+<h1>Nilestore</h1>
+</div>
+
+<div class="mainTabs">
+<div id="nodePane">
+
+<ul>
+	<li><a href="#uploadTab">Upload</a></li>
+	<li><a href="#myStoreTab">myStore</a></li>
+	<li><a href="#storageTab" id="storageTabA">Storage</a></li>
+</ul>
+
+<div id="uploadTab">
+<form id="file_upload" action="/upload" method="POST"
+	enctype="multipart/form-data"><input type="file" name="File"
+	multiple>
+<button>Upload</button>
+<div class="file_upload_label">Upload file</div>
+</form>
+
+<table id="files"></table>
+
+<div id="uploadResults"></div>
+
+</div>
+
+<div id="myStoreTab">
+
+<div id="myStoreDiv"></div>
+
+</div>
+
+<div id="storageTab">
+
+<div id="storageDiv">
+
+<table id="storageTable" class="ft-table">
+	<thead class="ft-thead">
+		<th>Storage Index</th>
+		<th>Size (KB)</th>
+		<th>Operation</th>
+	</thead>
+
+	<tbody class="ft-tbody" id="storageTablebody">
+
+	</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

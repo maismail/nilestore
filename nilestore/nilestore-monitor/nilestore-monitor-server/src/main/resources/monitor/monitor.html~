@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>
+Nilestore Monitor
+</title>
+<link rel="stylesheet" type="text/css" media="screen" href="jquery-ui.css" />
+<script type="text/javascript" src="jquery.js"></script>
+<script src="jquery-ui.js" type="text/javascript"></script>
+<script type="text/javascript" src="protovis.js"></script>
+<script type="text/javascript" src="monitor.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function()
+{
+	$("#tabs").tabs();
+	initCurrView("","currview");
+	initGrView("","grview");
+});
+</script>
+
+<style>
+	body
+	{
+		font-size:80%;
+		background: #ffffff;
+	}	
+	.title
+	{
+		color : blue;
+		text-align : center;
+	}
+	
+	.mainTabs
+	{
+		 position:absolute;
+		 top:60px;
+ 		 left:200px;
+ 		 right:200px;
+	}
+	</style>
+	
+</head>
+<body>
+<div class="title">
+<h1> Nilestore Monitor</h1>
+</div>
+<div class="mainTabs">
+<div id="tabs" >
+	<ul>
+		<li><a href="#storageMat">Storage Matrix</a></li>
+		<li><a href="#groupedView">Grouped View</a></li>
+	</ul>
+	<div id="storageMat">
+	<div id="currview"></div>
+	</div>
+	
+	<div id="groupedView">
+	 <div id="grview"></div>
+	</div>
+
+</div>
+</div>
+
+</body>
+</html>

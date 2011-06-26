@@ -1,0 +1,1 @@
+java -jar %NILESTORE_HOME%/nilestore-main-0.0.1-SNAPSHOT.jar %*

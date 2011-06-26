@@ -1,0 +1,62 @@
+/**
+*	jQuery TreeTable
+*/
+/* TABLE
+ * ========================================================================= */
+.ft-table {
+	border: 1px solid #888;
+	border-collapse: collapse;
+	line-height: 1;
+	margin: 1em auto;
+	width: 90%;
+}
+
+/* Caption
+ * ------------------------------------------------------------------------- */
+.ft-table caption {
+	font-size: .9em;
+	font-weight: bold;
+}
+
+/* Header
+ * ------------------------------------------------------------------------- */
+.ft-thead {
+	background: #aaa url(images/bg-table-thead.png) repeat-x top left;
+	font-size: .9em;
+}
+
+.ft-table .ft-thead tr th {
+	border: 1px solid #888;
+	font-weight: normal;
+	padding: .3em 1.67em .1em 1.67em;
+	text-align: center;
+}
+
+/* Body
+ * ------------------------------------------------------------------------- */
+.ft-table .ft-tbody tr td {
+	cursor: default;
+	padding: .3em 1.5em;
+}
+
+.ft-table .ft-tbody tr.even {
+	background: #f3f3f3;
+}
+
+.ft-table .ft-tbody tr.odd {
+	background: #fff;
+}
+
+.ft-table span {
+	background-position: center left;
+	background-repeat: no-repeat;
+	padding: .2em 0 .2em 1.5em;
+}
+
+.ft-table span.file {
+	background-image: url(images/page_white_text.png);
+}
+
+.ft-table span.folder {
+	background-image: url(images/folder.png);
+}
