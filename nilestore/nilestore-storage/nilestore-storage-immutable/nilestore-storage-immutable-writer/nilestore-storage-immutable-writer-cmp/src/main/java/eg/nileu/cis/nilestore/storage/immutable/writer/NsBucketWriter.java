@@ -38,7 +38,7 @@ import eg.nileu.cis.nilestore.storage.AbstractStorageServer;
 import eg.nileu.cis.nilestore.storage.CloseShareFile;
 import eg.nileu.cis.nilestore.storage.immutable.ImmutableShareFile;
 import eg.nileu.cis.nilestore.storage.immutable.UnkownImmutableContainerVersionError;
-import eg.nileu.cis.nilestore.storage.immutable.writer.port.OperationCompleted;
+import eg.nileu.cis.nilestore.storage.immutable.writer.port.RemoteWriteResponse;
 import eg.nileu.cis.nilestore.storage.immutable.writer.port.RemoteWrite;
 import eg.nileu.cis.nilestore.utils.FileUtils;
 
@@ -153,7 +153,7 @@ public class NsBucketWriter extends ComponentDefinition {
 
 			try {
 				sharefile.write_share_data(event.getOffset(), event.getData());
-				trigger(new OperationCompleted(self, dest), net);
+				trigger(new RemoteWriteResponse(self, dest), net);
 			} catch (IOException e) {
 				logger.error("Exception while writing sharefile", e);
 				// TODO: propagate this error to the other side to use other
@@ -187,7 +187,7 @@ public class NsBucketWriter extends ComponentDefinition {
 					FileUtils.JoinPath(finalhome, filename));
 			FileUtils.rmdir2(incominghome, 2);
 
-			trigger(new OperationCompleted(self, dest), net);
+			trigger(new RemoteWriteResponse(self, dest), net);
 			parent.bucketClosed(self.getId());
 		}
 	};

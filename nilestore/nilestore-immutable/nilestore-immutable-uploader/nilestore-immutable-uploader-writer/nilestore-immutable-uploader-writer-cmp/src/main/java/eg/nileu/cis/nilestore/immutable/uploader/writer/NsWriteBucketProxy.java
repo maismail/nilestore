@@ -53,7 +53,7 @@ import eg.nileu.cis.nilestore.immutable.uploader.writer.port.PutUEBCompleted;
 import eg.nileu.cis.nilestore.immutable.uploader.writer.port.WBProxy;
 import eg.nileu.cis.nilestore.storage.CloseShareFile;
 import eg.nileu.cis.nilestore.storage.immutable.ImmutableShareFile;
-import eg.nileu.cis.nilestore.storage.immutable.writer.port.OperationCompleted;
+import eg.nileu.cis.nilestore.storage.immutable.writer.port.RemoteWriteResponse;
 import eg.nileu.cis.nilestore.storage.immutable.writer.port.RemoteWrite;
 import eg.nileu.cis.nilestore.utils.DataUtils;
 import eg.nileu.cis.nilestore.utils.DumpUtils;
@@ -358,9 +358,9 @@ public class NsWriteBucketProxy extends ComponentDefinition {
 	};
 
 	/** The handle operation completed. */
-	Handler<OperationCompleted> handleOperationCompleted = new Handler<OperationCompleted>() {
+	Handler<RemoteWriteResponse> handleOperationCompleted = new Handler<RemoteWriteResponse>() {
 		@Override
-		public void handle(OperationCompleted event) {
+		public void handle(RemoteWriteResponse event) {
 
 			trigger(new CancelNotifyonFailure(notifyonFailureEvent), cfd);
 			logger.debug("({}): got {} completed from ({})", new Object[] {

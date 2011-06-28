@@ -28,7 +28,7 @@ import eg.nileu.cis.nilestore.common.ExtMessage;
  * 
  * @author Mahmoud Ismail <mahmoudahmedismail@gmail.com>
  */
-public class OperationCompleted extends ExtMessage {
+public class RemoteWriteResponse extends ExtMessage {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -7392265883541336272L;
@@ -41,7 +41,7 @@ public class OperationCompleted extends ExtMessage {
 	 * @param destination
 	 *            the destination
 	 */
-	public OperationCompleted(ComponentAddress source,
+	public RemoteWriteResponse(ComponentAddress source,
 			ComponentAddress destination) {
 		super(source, destination);
 	}
