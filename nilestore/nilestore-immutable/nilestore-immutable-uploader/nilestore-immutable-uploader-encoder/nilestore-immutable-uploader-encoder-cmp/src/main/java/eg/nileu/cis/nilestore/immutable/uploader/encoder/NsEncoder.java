@@ -476,22 +476,23 @@ public class NsEncoder extends ComponentDefinition {
 	 */
 	private ByteArray[] _gather_data(int num_chunks, int input_chunk_size,
 			SHA256d crypttext_segment_hasher, boolean allowshort) {
-		// byte[][] chunks = new byte[num_chunks][input_chunk_size];
 		ByteArray[] chunks = new ByteArray[num_chunks];
 		try {
-			for (int i = 0; i < num_chunks; i++) {
-				byte[] data = uploadable.readEncrypted(input_chunk_size);
-				assert data.length == input_chunk_size;
-
-				crypttext_segment_hasher.update(data);
-				crypttext_hasher.update(data);
-				if (allowshort) {
-					if (data.length < input_chunk_size) {
-						// Padding
-						data = Arrays.copyOf(data, input_chunk_size);
-					}
+			int read_size = num_chunks * input_chunk_size;
+			byte[] data = uploadable.readEncrypted(read_size);
+			crypttext_segment_hasher.update(data);
+			crypttext_hasher.update(data);
+			if (allowshort) {
+				if (data.length < read_size) {
+					// Padding
+					data = Arrays.copyOf(data, read_size);
 				}
-				chunks[i] = new ByteArray(data);
+			}
+			
+			for(int i=0;i<num_chunks;i++){
+				int start = i*input_chunk_size;
+				int end = (i+1) * input_chunk_size;
+				chunks[i] = new ByteArray(Arrays.copyOfRange(data, start, end));
 			}
 		} catch (IOException e) {
 			logger.error("Exception while reading from the file: ", e);
@@ -530,7 +531,7 @@ public class NsEncoder extends ComponentDefinition {
 	private void encode_and_send_segments() {
 		logger.info("(SI={}): encode segment {}/{}", new Object[] {
 				storageIndex, segment_num + 1, num_segments });
-
+		
 		start_encoding = System.nanoTime();
 		SHA256d crypttext_segment_hasher = Hasher.getCrypttextSegmenthasher();
 		ByteArray[] chunks = _gather_data(encodingParam.getK(), block_size,
@@ -704,7 +705,7 @@ public class NsEncoder extends ComponentDefinition {
 		}
 
 	}
-
+	
 	/**
 	 * Send_uri_extension_to_all_shareholders.
 	 */

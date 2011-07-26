@@ -31,6 +31,8 @@ import se.sics.kompics.Component;
 import se.sics.kompics.ComponentDefinition;
 import se.sics.kompics.network.Network;
 import se.sics.kompics.network.NetworkConfiguration;
+import se.sics.kompics.network.grizzly.GrizzlyNetwork;
+import se.sics.kompics.network.grizzly.GrizzlyNetworkInit;
 import se.sics.kompics.network.mina.MinaNetwork;
 import se.sics.kompics.network.mina.MinaNetworkInit;
 import se.sics.kompics.network.netty.NettyNetwork;
@@ -64,8 +66,10 @@ public class NsMonitorMain extends ComponentDefinition {
 	 */
 	public NsMonitorMain() throws IOException {
 		final String netCmp = System.getProperty("nilestore.net.cmp");
-		Component network = netCmp.equals("mina") ? create(MinaNetwork.class)
-				: create(NettyNetwork.class);
+		Component network = netCmp.equals("netty") ? create(NettyNetwork.class)
+				: netCmp.equals("grizzly") ? create(GrizzlyNetwork.class)
+						: create(MinaNetwork.class);
+
 		Component timer = create(JavaTimer.class);
 		Component webServer = create(NsWebServer.class);
 		Component monitor = create(NsMonitorServer.class);
@@ -85,14 +89,18 @@ public class NsMonitorMain extends ComponentDefinition {
 		logger.info("initiating {}Network with Address={},compressionLevel={}",
 				new Object[] { netCmp, networkConfiguration.getAddress(), cl });
 
-		if (netCmp.equals("mina")) {
+		if (netCmp.equals("netty")) {
+			trigger(new NettyNetworkInit(networkConfiguration.getAddress(), 5,
+					cl), network.getControl());
+		} else if (netCmp.equals("grizzly")) {
+			trigger(new GrizzlyNetworkInit(networkConfiguration.getAddress(),
+					5, cl), network.getControl());
+		} else {
 			trigger(new MinaNetworkInit(networkConfiguration.getAddress(), 5,
 					networkConfiguration.getAddress().getPort() + 1, cl),
 					network.getControl());
-		} else {
-			trigger(new NettyNetworkInit(networkConfiguration.getAddress(), 5,
-					cl), network.getControl());
 		}
+
 		NsWebServerInit webServerInit = createWebServer(webConfiguration);
 		trigger(webServerInit, webServer.getControl());
 

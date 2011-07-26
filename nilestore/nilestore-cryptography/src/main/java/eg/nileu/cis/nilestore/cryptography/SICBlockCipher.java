@@ -50,7 +50,7 @@ public class SICBlockCipher implements BlockCipher {
 
 	/**
 	 * 
-	 * Copied from processBlock method below with carry changed to -1
+	 * Copied from processBlock method below with carry changed to -1 
 	 */
 	public void Countermm() {
 		int carry = -1;
@@ -60,6 +60,8 @@ public class SICBlockCipher implements BlockCipher {
 
 			if (x > 0xff) {
 				carry = 1;
+			} else if (x == -1 && carry == -1) {
+				carry = -1;
 			} else {
 				carry = 0;
 			}

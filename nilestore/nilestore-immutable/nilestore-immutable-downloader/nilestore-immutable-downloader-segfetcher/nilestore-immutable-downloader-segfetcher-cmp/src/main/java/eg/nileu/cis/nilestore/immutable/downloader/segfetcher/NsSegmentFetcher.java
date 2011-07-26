@@ -213,9 +213,10 @@ public class NsSegmentFetcher extends ComponentDefinition {
 			Share sh = activeShareMap.remove(shnum);
 
 			if (event.isSucceeded()) {
-				// besides the status parameter which check is the peer holding
+				// TODO: add a parameter to identify if the file corrupted or not:
+				// besides the status parameter which checks if is the peer holding
 				// that block is alive or not
-				// there another parameter which checks if this file is
+				// there is another parameter which checks if this file is
 				// corrupted or not
 				synchronized (currentBlocks) {
 					currentBlocks.put(shnum, event.getData());
@@ -292,10 +293,10 @@ public class NsSegmentFetcher extends ComponentDefinition {
 						new Object[] { storageIndex,
 								DumpUtils.dumptolog(shares),
 								DumpUtils.dumptolog(currentShares) });
-				// TODO: if we were here thats means that we have no other
+				// TODO: if we are here thats means that we have no other
 				// shares to communicate with and
 				// our current blocks and blocks we are waiting for is less than
-				// the required so the download failed
+				// the required so the downloading operation failed
 				trigger(new GetSegmentResponse(status, null), segmentFetcher);
 				return;
 			}

@@ -21,12 +21,12 @@
 <script type="text/javascript" src="peer.js"></script>
 
 <script type="text/javascript">
-	$(document).ready(function () {
+	$(document).ready(function() {
 		init();
 	});
-	</script>
+</script>
 
-<style>
+<style type="text/css">
 body {
 	font-size: 80%;
 	background: #ffffff;
@@ -48,63 +48,63 @@ body {
 </head>
 <body>
 
-<div class="title">
-<h1>Nilestore</h1>
-</div>
+	<div class="title">
+		<h1>Nilestore</h1>
+	</div>
 
-<div class="mainTabs">
-<div id="nodePane">
+	<div class="mainTabs">
+		<div id="nodePane">
 
-<ul>
-	<li><a href="#uploadTab">Upload</a></li>
-	<li><a href="#myStoreTab">myStore</a></li>
-	<li><a href="#storageTab" id="storageTabA">Storage</a></li>
-</ul>
+			<ul>
+				<li><a href="#uploadTab">Upload</a></li>
+				<li><a href="#myStoreTab">myStore</a></li>
+				<li><a href="#storageTab" id="storageTabA">Storage</a></li>
+			</ul>
 
-<div id="uploadTab">
-<form id="file_upload" action="/upload" method="POST"
-	enctype="multipart/form-data"><input type="file" name="File"
-	multiple>
-<button>Upload</button>
-<div class="file_upload_label">Upload file</div>
-</form>
+			<div id="uploadTab">
+				<form id="file_upload" action="/upload" method="POST"
+					enctype="multipart/form-data">
+					<input type="file" name="File" multiple>
+					<button>Upload</button>
+					<div class="file_upload_label">Upload file</div>
+				</form>
 
-<table id="files"></table>
+				<table id="files"></table>
 
-<div id="uploadResults"></div>
+				<div id="uploadResults"></div>
 
-</div>
+			</div>
 
-<div id="myStoreTab">
+			<div id="myStoreTab">
 
-<div id="myStoreDiv"></div>
+				<div id="myStoreDiv"></div>
 
-</div>
+			</div>
 
-<div id="storageTab">
+			<div id="storageTab">
 
-<div id="storageDiv">
+				<div id="storageDiv">
 
-<table id="storageTable" class="ft-table">
-	<thead class="ft-thead">
-		<th>Storage Index</th>
-		<th>Size (KB)</th>
-		<th>Operation</th>
-	</thead>
+					<table id="storageTable" class="ft-table">
+						<thead class="ft-thead">
+							<th>Storage Index</th>
+							<th>Size (KB)</th>
+							<th>Operation</th>
+						</thead>
 
-	<tbody class="ft-tbody" id="storageTablebody">
+						<tbody class="ft-tbody" id="storageTablebody">
 
-	</tbody>
+						</tbody>
 
-</table>
+					</table>
 
-</div>
+				</div>
 
-</div>
+			</div>
 
-</div>
+		</div>
 
-</div>
+	</div>
 
 </body>
 </html>

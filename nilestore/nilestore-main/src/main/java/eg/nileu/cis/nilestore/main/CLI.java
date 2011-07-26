@@ -20,6 +20,7 @@
 package eg.nileu.cis.nilestore.main;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -56,9 +57,9 @@ public class CLI {
 	/** The compression level. */
 	@Parameter(names = { "-cl", "--compression-level" }, description = "compression level for the compression filter attached with the network component it takes values from 0 to 9")
 	private Integer compressionLevel = 9;
-
+	//TODO: add parameter validators
 	/** The network. */
-	@Parameter(names = { "-net", "--network-cmp" }, description = "network component to be used. either mina or netty")
+	@Parameter(names = { "-net", "--network-cmp" }, description = "network component to be used. [mina or netty or grizzly]")
 	private String network = "mina";
 
 	/** The help. */
@@ -344,6 +345,8 @@ public class CLI {
 			System.out.println(String.format("%s node created @ %s", nodetype,
 					FileUtils.getAbsPath(nodePath)));
 		} else if (command.equals("start")) {
+			
+			// TODO: use the process builder for starting 
 
 			PropertyConfigurator.configureAndWatch(FileUtils.JoinPath(
 					start.getNodePath(), "log", "log4j.props"));
@@ -376,7 +379,9 @@ public class CLI {
 			}
 			System.setProperty("nilestore.net.cl", compressionLevel.toString());
 			System.setProperty("nilestore.net.cmp", network);
-
+			
+			writePidFile(start.getNodePath());
+			
 			if (nodetype.equals("introducer")) {
 				Kompics.createAndStart(NsIntroducerMain.class, threads);
 			} else if (nodetype.equals("client")) {
@@ -385,7 +390,7 @@ public class CLI {
 				Kompics.createAndStart(NsMonitorMain.class, threads);
 			}
 		} else if (command.equals("stop")) {
-			// TODO: use the process builder for starting and stoping
+			//TODO:
 		} else if (command.equals("run-simulator")) {
 			System.setProperty("nilestore.sim.homedir", runSim.getNodePath());
 			System.setProperty("nilestore.sim.webport",
@@ -506,5 +511,17 @@ public class CLI {
 		Properties props = new Properties();
 		props.setProperty("log4j.rootLogger", "OFF");
 		PropertyConfigurator.configure(props);
+	}
+	
+	private void writePidFile(String dir){
+		String name=ManagementFactory.getRuntimeMXBean().getName();
+		String pid = name.split("@")[0];
+		try {
+			FileUtils.writeLine(pid, FileUtils.JoinPath(dir, "nilestore.pid"));
+		} catch (IOException e) {
+			System.err.println("Error during writing nilestore.pid : "
+					+ e.getMessage());
+			System.exit(-1);
+		}
 	}
 }

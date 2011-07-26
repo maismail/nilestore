@@ -142,7 +142,7 @@ public class NsDownloader extends ComponentDefinition {
 	Handler<DownloadingDone> handleDownloadNodeDone = new Handler<DownloadingDone>() {
 		@Override
 		public void handle(DownloadingDone event) {
-			logger.info("(SI={}): download completed", storageIndex);
+			logger.info("(SI={}): got downloadingdone from DownloadNode, Status={}", storageIndex, event.getStatus());
 			destroyAll();
 			trigger(event, downloader);
 		}

@@ -32,7 +32,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
@@ -40,6 +40,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import eg.nileu.cis.nilestore.main.progress.FileBodyProgress;
+import eg.nileu.cis.nilestore.main.progress.OutputStreamProgress;
+import eg.nileu.cis.nilestore.main.progress.ProgressListener;
+import eg.nileu.cis.nilestore.main.progress.ProgressUtils;
 import eg.nileu.cis.nilestore.utils.FileUtils;
 
 // TODO: Auto-generated Javadoc
@@ -73,7 +77,24 @@ public class HttpDealer {
 		MultipartEntity entity = new MultipartEntity(
 				HttpMultipartMode.BROWSER_COMPATIBLE);
 
-		entity.addPart("File", new FileBody(new File(filepath)));
+		File file = new File(filepath);
+		final double filesize = file.length();
+		
+		ContentBody fbody = new FileBodyProgress(file, new ProgressListener() {
+			
+			@Override
+			public void transfered(long bytes, float rate) {
+				int percent = (int) ((bytes / filesize) * 100);
+				String bar = ProgressUtils.progressBar("Uploading file to the gateway : ",percent,rate);
+				System.err.print("\r"+bar);
+				if(percent == 100){
+					System.err.println();
+					System.err.println("wait the gateway is processing and saving your file");
+				}
+			}
+		});
+		
+		entity.addPart("File", fbody);
 
 		post.setEntity(entity);
 
@@ -123,19 +144,32 @@ public class HttpDealer {
 		HttpGet get = new HttpGet(url);
 
 		HttpResponse response = client.execute(get);
-
+		
 		if (response != null) {
 			System.err.println(response.getStatusLine());
 			HttpEntity ht = response.getEntity();
+			final double filesize = ht.getContentLength();
+			
 			FileOutputStream out = new FileOutputStream(FileUtils.JoinPath(
 					downloadDir, cap));
-			ht.writeTo(out);
+			OutputStreamProgress cout = new OutputStreamProgress(out, new ProgressListener() {
+				
+				@Override
+				public void transfered(long bytes,float rate) {
+					int percent = (int) ((bytes / filesize) * 100);
+					String bar = ProgressUtils.progressBar("Download Progress: ",percent,rate);
+					System.out.print("\r"+bar);
+				}
+			});
+			
+			ht.writeTo(cout);
 			out.close();
+			System.out.println();
 		} else {
 			System.err.println("Error: response = null");
 		}
 
 		client.getConnectionManager().shutdown();
 	}
-
+	
 }

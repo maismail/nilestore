@@ -177,7 +177,7 @@ public class NsReadBucketProxy extends ComponentDefinition {
 			dest = init.getDest();
 			sharenum = init.getSharenum();
 
-			logger.info("({}) initiated for ({})", self, dest);
+			logger.debug("({}) initiated for ({})", self, dest);
 
 			notifyonFailureEvent = new NotifyonFailure(dest.getAddress());
 			getHeader();
@@ -194,7 +194,6 @@ public class NsReadBucketProxy extends ComponentDefinition {
 				return;
 			}
 			getUEB();
-			getCiphertextHashTree();
 		}
 	};
 
@@ -369,6 +368,9 @@ public class NsReadBucketProxy extends ComponentDefinition {
 	 *            the data
 	 */
 	private void gotUEB(byte[] data) {
+		
+		getCiphertextHashTree();
+		
 		logger.debug("({}) gotUEB", self);
 		ByteBuffer buffer = ByteBuffer.wrap(data);
 		int len = buffer.getInt();

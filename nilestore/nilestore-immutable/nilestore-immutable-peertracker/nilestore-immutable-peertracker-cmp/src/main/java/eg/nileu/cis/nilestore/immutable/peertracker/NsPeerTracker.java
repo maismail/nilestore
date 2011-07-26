@@ -145,7 +145,7 @@ public class NsPeerTracker extends ComponentDefinition {
 			serverAddress = init.getServerAddress();
 			logger = Slf4jInstantiator.getLogger(NsPeerTracker.class, init
 					.getSelfAddress().getNickname());
-			logger.info("({}) started for ({})", self, dest);
+			logger.debug("({}) started for ({})", self, dest);
 		}
 	};
 

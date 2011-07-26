@@ -95,32 +95,27 @@ public class EncryptFileHandle {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public byte[] readEncrypted(int length) throws IOException {
-		getencryptor();
 
-		if (_original.pos() == _original.length()) {
+		getencryptor();
+		long currPos = _original.pos();
+		if (currPos == size) {
 			return null;
 		}
-		length = (int) (length > (_original.length() - _original.pos()) ? (_original
-				.length() - _original.pos()) : length);
+		length = (int) (length > (size - currPos) ? (size - currPos) : length);
 		int remaining = length;
 		int ctLength = 0;
-		// int chunksize = length > CHUNKSIZE ? CHUNKSIZE : length;
 
-		byte[] plaintext = new byte[CHUNKSIZE];
 		byte[] cipherText = new byte[cipher.getOutputSize(length)];
-
 		while (remaining > 0) {
-			if (remaining < CHUNKSIZE) {
-				plaintext = new byte[remaining];
-			}
+
+			int readSize = Math.min(remaining, CHUNKSIZE);
+			byte[] plaintext = new byte[readSize];
 			int status = _original.read(plaintext);
 
 			if (status == -1) {
 				break;
 			}
-
-			remaining -= CHUNKSIZE;
-
+			remaining -= readSize;
 			ctLength += cipher.update(plaintext, 0, plaintext.length,
 					cipherText, ctLength);
 
@@ -176,5 +171,4 @@ public class EncryptFileHandle {
 	public void close() throws IOException {
 		_original.close();
 	}
-
 }

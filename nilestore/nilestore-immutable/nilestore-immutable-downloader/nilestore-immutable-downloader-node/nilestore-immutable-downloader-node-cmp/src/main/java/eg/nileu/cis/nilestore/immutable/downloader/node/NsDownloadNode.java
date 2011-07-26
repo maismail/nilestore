@@ -212,6 +212,8 @@ public class NsDownloadNode extends NsBucketProxiesHolder {
 				}
 
 				shares.addAll(_shares);
+				//FIXME:BUG: the systems hangs while repeating the downloading process for a set files for multiple consecutive trials
+				//the segment fetcher doesn't respond any events 
 				trigger(new AddShares(_shares),
 						segmentfetcher.provided(SegmentFetcher.class));
 
@@ -494,12 +496,12 @@ public class NsDownloadNode extends NsBucketProxiesHolder {
 	private void destroyAll() {
 		triggerCloseOnAllRBPs();
 		// FIXME:
-		try {
+		/*try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		destroyAllBucketProxies(segmentfetcher.required(RBProxy.class));
 		destroy(segmentfetcher);
 		disconnect(sharefinder.required(Network.class), network);

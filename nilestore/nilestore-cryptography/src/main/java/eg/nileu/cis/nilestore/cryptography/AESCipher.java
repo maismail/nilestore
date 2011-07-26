@@ -42,6 +42,7 @@ public class AESCipher {
 	private final int blockSize;
 
 	// TODO: write test cases for that code
+	// TODO: implement random access encryption/decryption
 	/**
 	 * Instantiates a new aES cipher.
 	 * 

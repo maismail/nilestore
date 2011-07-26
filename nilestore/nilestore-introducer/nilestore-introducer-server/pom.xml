@@ -38,13 +38,19 @@
 		<dependency>
 			<groupId>se.sics.kompics.basic</groupId>
 			<artifactId>kompics-component-mina-network</artifactId>
-			<version>0.4.3</version>
+			<version>0.4.4-SNAPSHOT</version>
 		</dependency>
 		<!-- netty isn't released yet -->
 		<dependency>
 			<groupId>se.sics.kompics.basic</groupId>
 			<artifactId>kompics-component-netty-network</artifactId>
-			<version>0.4.4</version>
+			<version>0.4.4-SNAPSHOT</version>
+		</dependency>
+		<!-- grizzly isn't released yet -->
+		<dependency>
+			<groupId>se.sics.kompics.basic</groupId>
+			<artifactId>kompics-component-grizzly-network</artifactId>
+			<version>0.4.4-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
