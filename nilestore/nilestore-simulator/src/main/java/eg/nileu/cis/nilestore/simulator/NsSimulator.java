@@ -93,9 +93,16 @@ public class NsSimulator extends ComponentDefinition {
 	/** The nodes map. */
 	private final HashMap<String, Component> nodes;
 
-	/** The first node id. */
-	private int nodeId = 1;
-
+	//private int nodeId = 1;
+	
+	private int K = 3;
+	
+	private int N = 10;
+	
+	private int SC;
+	
+	private int NC;
+	
 	/** The logs map. */
 	private final HashMap<String, List<String>> logs;
 
@@ -145,19 +152,19 @@ public class NsSimulator extends ComponentDefinition {
 			if (request instanceof OperationRequest) {
 				OperationRequest req = (OperationRequest) request;
 				String op = req.getOperation();
-				logger.info(" Got " + op);
+				logger.info("Got " + op);
 				if (op.equals("run")) {
-					int nc = Integer.valueOf(req.getParameter("nc"));
-					int sc = Integer.valueOf(req.getParameter("sc"));
-					int k = Integer.valueOf(req.getParameter("k"));
-					int n = Integer.valueOf(req.getParameter("n"));
+					NC = Integer.valueOf(req.getParameter("nc"));
+					SC = Integer.valueOf(req.getParameter("sc"));
+					K = Integer.valueOf(req.getParameter("k"));
+					N = Integer.valueOf(req.getParameter("n"));
 
-					for (int i = 0; i < nc; i++) {
+					for (int i = 0; i < NC; i++) {
 						boolean storageEnabled = true;
-						if (i >= sc) {
+						if (i >= SC) {
 							storageEnabled = false;
 						}
-						createAndStartNewNode(storageEnabled, k, n);
+						createAndStartNewNode(storageEnabled,i+1, K, N);
 					}
 					trigger(new WebResponse(event, "nodes created"), web);
 				} else if (op.equals("getlog")) {
@@ -165,6 +172,7 @@ public class NsSimulator extends ComponentDefinition {
 					int dest = Integer.valueOf(req.getParameter("mdest"));
 					String node = dest == -1 ? "introducer"
 							: dest == 0 ? "monitor" : "node" + dest;
+					logger.info(op + " for " + node);
 					List<String> nlogs = new ArrayList<String>();
 					synchronized (logs) {
 						if (logs.containsKey(node)) {
@@ -177,7 +185,33 @@ public class NsSimulator extends ComponentDefinition {
 					arr.addAll(nlogs);
 
 					trigger(new WebResponse(event, arr.toJSONString()), web);
+				} else if(op.equals("stop")){
+					String mdest = req.getParameter("mdest");
+					if(mdest == null){
+						stopAllNodes();
+						trigger(new WebResponse(event, "nodes stoped"), web);
+					}else{
+						String node = "node"+mdest;
+						logger.info( op + " for " + node);
+						stopNode(node);
+						trigger(new WebResponse(event,  node + " stoped"), web);
+					}
+					
+				}else if(op.equals("start")){
+					String mdest = req.getParameter("mdest");
+					if(mdest != null){
+						String node = "node"+mdest;
+						logger.info( op + " for " + node);
+						int nId = Integer.valueOf(mdest);
+						boolean storageEnabled = true;
+						if (nId >= (SC+1)) {
+							storageEnabled = false;
+						}
+						createAndStartNewNode(storageEnabled,nId, K, N);
+						trigger(new WebResponse(event,  node + " started"), web);
+					}
 				}
+				
 			}
 		}
 	};
@@ -193,9 +227,9 @@ public class NsSimulator extends ComponentDefinition {
 	 *            the n
 	 * @return the component
 	 */
-	private final Component createAndStartNewNode(boolean storageEnabled,
+	private final Component createAndStartNewNode(boolean storageEnabled,int nId,
 			int k, int n) {
-		Address nodeAddress = getNodeAddress();
+		Address nodeAddress = getNodeAddress(nId);
 
 		Component node = create(NsPeer.class);
 
@@ -203,17 +237,18 @@ public class NsSimulator extends ComponentDefinition {
 		connect(node.required(Network.class), network,
 				new MessageDestinationFilter(nodeAddress));
 		connect(node.provided(Web.class), web, new WebRequestDestinationFilter(
-				nodeId));
+				nId));
 
 		// connect(node.required(NetworkControl.class), networkcontrol);
 
 		PingFailureDetectorConfiguration pingConfiguration = new PingFailureDetectorConfiguration(
-				1000, 5000, 1000, 0, Transport.TCP);
+				1000, 5000, 1000, 0, 		//nodeId++;
+Transport.TCP);
 
-		String nickname = "node" + nodeId;
+		String nickname = "node" + nId;
 		ClientConfiguration clientConfiguration = new ClientConfiguration(
 				nickname, storageEnabled, FileUtils.JoinPath(homeDir,
-						String.valueOf(nodeId)), new EncodingParam(k, n));
+						String.valueOf(nId)), new EncodingParam(k, n));
 
 		synchronized (nodes) {
 			nodes.put(nickname, node);
@@ -223,7 +258,6 @@ public class NsSimulator extends ComponentDefinition {
 				introducerConfiguration, monitorConfiguration,
 				pingConfiguration), node.getControl());
 		trigger(new Start(), node.getControl());
-		nodeId++;
 		return node;
 	}
 
@@ -232,10 +266,40 @@ public class NsSimulator extends ComponentDefinition {
 	 * 
 	 * @return the node address
 	 */
-	private Address getNodeAddress() {
-		return new Address(peer0Address.getIp(), peer0Address.getPort(), nodeId);
+	private Address getNodeAddress(int nId) {
+		return new Address(peer0Address.getIp(), peer0Address.getPort(), nId);
 	}
-
+	
+	private void stopAllNodes(){
+		synchronized (nodes) {
+			for(Component node : nodes.values()){
+				destroyNode(node);
+			}
+			nodes.clear();
+		}
+		//nodeId=1;
+	}
+	
+	private void stopNode(String nodeID){
+		Component node;
+		synchronized (nodes) {
+			node=nodes.remove(nodeID);
+		}
+		if(node == null){
+			return;
+		}
+		
+		destroyNode(node);
+	}
+	
+	private void destroyNode(Component node){
+		
+		disconnect(node.required(Timer.class), timer);
+		disconnect(node.required(Network.class), network);
+		disconnect(node.provided(Web.class), web);
+		
+		destroy(node);
+	}
 	/**
 	 * Adds the logging event.
 	 * 
