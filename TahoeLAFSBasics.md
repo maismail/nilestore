@@ -19,20 +19,20 @@ the job.
 
 When a group of friends need to setup their own data store using their machines, Tahoe could be used for such a use case. To setup the grid, users need to understand different roles for Tahoe's node such
 as introducer, client, storage roles as illustrated in [Tahoe Grid](#Tahoe_Grid.md), but as a start consider that the nodes
-have been setup appropriately as shown in the next figure.
+have been setup appropriately as shown inthe next figure.
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/friendsgrid.png' align='middle' title='Eight machines are connected together to construct a Tahoe grid; one introducer node, 6 client+storage nodes, and 1 client node' width='50%' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/tahoe/friendsgrid.png' align='middle' title='Eight machines are connected together to construct a Tahoe grid; one introducer node, 6 client+storage nodes, and 1 client node' width='50%' />
 
-Now whenever a user "for example Shady" wants to upload a file to the grid, the user node will start
-processing and sending the file as illustrated in the next figure. The upload process will end by receiving a
-capability uri of the form (URI:CHK:...:.:..) at the user node who uploaded the le. This uri could be
-considered for now as the path of the le in the data store, in the next sections we are going to discuss the capabilities in greater details. Users should keep the capability uri to use it to access that file again.
+Now whenever a user "for example Shady" wants to upload afile to the grid, the user node will start
+processing and sending the file as illustrated inthe next figure. The upload process will end by receiving a
+capability uri of the form (URI:CHK:...:.:..) at the user node who uploaded thele. This uri could be
+considered for now as the path of thele in the data store, in the next sections we are going to discuss the capabilities in greater details. Users should keep the capability uri to use it to access that file again.
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/friendsupload.png' align='middle' title="Description of steps encountered in an uploading process, Shady uploads a file 'nature.png' into the grid" width='90%' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/tahoe/friendsupload.png' align='middle' title="Description of steps encountered in an uploading process, Shady uploads a file 'nature.png' into the grid" width='90%' />
 
 All users who have the capability uri for "nature.png" can download that file, when a download process is initiated the system will start processing and downloading the file as illustrated in next figure.
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/friendsdownload.png' align='middle' title="Description of steps encountered in a downloading process, Mahmoud downloads a file 'nature.png' from the grid" width='90%' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/tahoe/friendsdownload.png' align='middle' title="Description of steps encountered in a downloading process, Mahmoud downloads a file 'nature.png' from the grid" width='90%' />
 
 ## Access Control ##
 
@@ -64,13 +64,13 @@ data = GET(key)
   1. Decentralized File System Layer : The key-value store provides the mapping from URI to data, decentralized file system layer turn this into a graph of directories and files where files are leaves. It needs to keep track of directory nodes to maintain a graph of files and directories.
   1. Application Layer : Application specic features that use the underlying layers for example Allmydata.com used it for a backup service: the application periodically copies files from the local disk onto the decentralized file system.
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/architecture.png' align='middle' title="Tahoe's Architecture Layers" width='40%' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/tahoe/architecture.png' align='middle' title="Tahoe's Architecture Layers" width='40%' />
 
 ### File Encoding ###
 
 Whenever a user initiates a put operation of a file into the grid, the client will encrypt the file producing a ciphertext. the resulted ciphertext is broken up into multiple number of small segments to reduce memory footprint. after that the client will apply erasure coding on each segment producing (N) blocks where a subset (K) of these blocks is sufficient to recover the file. Each block is sent to a different server. the set of blocks on a given server constitutes a Share.
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/fileencoding.png' align='middle' title='File Encoding' width='40%' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/tahoe/fileencoding.png' align='middle' title='File Encoding' width='40%' />
 
 Tahoe uses Merkle hash trees to defend against problems in _file validity_. there are different trees used in Tahoe as listed below :
   * **Blocks Hash Tree** which is computed over the blocks in the same share. it used to validate the blocks of the share. the root of this tree is used to identify that share "_block root hash_" and used to construct another higher level tree _Shares Hash Tree_.
@@ -88,7 +88,7 @@ myroot = Hash( h1 | h2)
 
 These hash trees are saved inside a small data structure called _URI Extension Block (UEB)_ which saved aside shares on servers. UEB also contains ciphertext hash, original file size, and the encoding parameters.
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/hashtrees.png' align='middle' title='Example of Blocks Hash Tree and Shares Hash Tree for a file consists of 4 segments and N set to 4' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/tahoe/hashtrees.png' align='middle' title='Example of Blocks Hash Tree and Shares Hash Tree for a file consists of 4 segments and N set to 4' />
 
 ### Capabilities ###
 
@@ -103,7 +103,7 @@ Each file or directory in the grid is identified by a URI includes a read/write/
 | LIT-URI        | URI:LIT:(data) | LIT URIs are used for files smaller than 55 bytes in which the file could be stored in the URI itself.<br /> **data** is the file hashed using SHA265d and encoded in base32 encoding.|
 
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/immutablecaps.png' align='middle' title='Immutable File Capabilities' width='70%' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/tahoe/immutablecaps.png' align='middle' title='Immutable File Capabilities' width='70%' />
 
 
 **Mutable file** uses RSA public key technology and it has write-cap, read-cap and verify-cap.
@@ -115,7 +115,7 @@ Each file or directory in the grid is identified by a URI includes a read/write/
 | verify-cap     | URI:SSK-Verifier:(storageindex):(fingerprint) |    **storageindex** is the SHA265d hash of the readkey truncated to 16-byte.|
 
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/mutablecaps.png' align='middle' title='Mutable File Capabilities' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/tahoe/mutablecaps.png' align='middle' title='Mutable File Capabilities' />
 
 
 **Directories (Dirnodes)** are used by the vdrive layer, dirnodes are contained inside mutable files and have a write-cap, read-cap and verify-cap.
@@ -135,7 +135,7 @@ There are three main roles for a Tahoe node;
 #### Introducer Node ####
 It is the entry point for new nodes to discover existing nodes in the grid in order to communicate with. it follows the **publish/subscribe** pattern where every node upon start will subscribe to storage service on the introducer, if the node has a storage server inside then it will publish its storage service to the introducer, and the introducer will announces all the subscribed nodes with the newly published nodes. Introducer is a Single Point of Failure **SPOF** but there are current work on Tahoe to implement multiple introducers to avoid this problem.
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/pubsub.png' align='middle' title='Public/Subscribe Pattern' width='300' height='300' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/tahoe/pubsub.png' align='middle' title='Public/Subscribe Pattern' width='300' height='300' />
 
 #### Client ####
 It is the gateway to put and get data remotely in Tahoe grid. each Client node has an **IntroducerClient** to communicate with the **IntroducerServer** to get information about existing nodes and newly added nodes.

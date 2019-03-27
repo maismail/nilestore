@@ -22,17 +22,17 @@ There are three main node types in Nilestore; _Peer_, _Introducer_, _Monitor_, a
 
 It is the main node in Nilestore, it provides the functionality of the distributed storage system by allowing users to  put/get files into/from the grid.
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/peer.png' align='middle' title='Peer Node' width='320' height='240'>
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/peer.png' align='middle' title='Peer Node' width='320' height='240'>
 
 <b>NsPeer</b> is the main component in Nilestore, it requires <i>Network</i>, <i>NetworkControl</i>, and <i>Timer</i> ports and provides <i>NilestorePeer</i> and <i>Web</i> ports as shown in the next Figure below. it encapsulates different functional components that we will discuss each in details in the following sections.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/nspeer.png' align='middle' title='NsPeer Component'>
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/nspeer.png' align='middle' title='NsPeer Component'>
 
 <h4>Available Peers</h4>
 
 <b>NsAvailablePeers</b> is an abstraction for the underlying overlay, it holds information about other living peers in the grid. it requires <i>Timer</i>, <i>Network</i>, and <i>FailureDetector</i> ports and provides <i>AvailablePeers</i> and <i>APStatus</i> ports as shown in next figure.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/nsavailablepeers.png' align='middle' title='NsAvailablePeers Component'>
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/nsavailablepeers.png' align='middle' title='NsAvailablePeers Component'>
 
 
 In Nilestore, we have two different overlay implementation centralized and decentralized. note that the main components that changes according to overlay type are <b>NsShareFinder</b> and <b>NsPeerSelector</b> because both try to solve either where to put the shares? or where to find the shares?.<br>
@@ -43,7 +43,7 @@ In Nilestore, we have two different overlay implementation centralized and decen
 
 <ul><li><b>Decentralized Version<code>[1]</code></b> in this case each peer -only who have a storage server- contribute in a DHT Chord ring. As described in the next figure, decentralized version of <b>NsAvailablePeers</b> has a <b>Chord</b> component which holds the information about the Chord Ring that we are part of and <b>BootstrapClient</b> which communicates with the <b>BootstrapServer</b> which is responsible for initializing the ring.</li></ul>
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/nsavailablepeers2.png' align='middle' title='NsAvailablePeers Component (Decentralized Version)' width='320' height='240' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/nsavailablepeers2.png' align='middle' title='NsAvailablePeers Component (Decentralized Version)' width='320' height='240' />
 
 <blockquote>when a <i>GetPeers(peerselectionIndex)</i> is triggered at the <b>AvailablePeers</b> port, NsAvailablePeers will triggers a <i>Chordlookup</i> event at <b>ChordSO</b> then, after receiving <i>ChordlookupResponse</i> it will triggers back a <i>GetPeersResponse(peer)</i> where peer is the closest peer to <i>peerselectionIndex</i> in the ring.</blockquote>
 
@@ -53,7 +53,7 @@ In Nilestore, we have two different overlay implementation centralized and decen
 
 <b>NsConnectionFailureDetector (CFD)</b> is responsible for detecting connection failures by keeping track of the network status "Session Open, Session Close" through <i>NetControl</i> port and by using <i>Timer</i> timeout events and <b>PingFailureDetector</b> component "Kompics component tweaked by adding number of tries instead of pinging forever".<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/cfd.png' align='middle' title='NsConnectionFailureDetector Component' width='400' height='200' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/cfd.png' align='middle' title='NsConnectionFailureDetector Component' width='400' height='200' />
 
 <b>CFD</b> acts as a wrapper for <b>PingFailureDetector</b> component as it holds it inside to be used by the  the <b>CFD</b> itself and provides it to other components by providing the <i>FailureDetector</i> port.<br>
 <br>
@@ -61,13 +61,13 @@ when  <i>NotifyonFailure</i> event is triggered at the <i>CFailureDetector</i> p
 <br>
 A sequence diagram of <b>CFD</b> operation is described in figure below. note that for clarity the Network part is not included.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/cfdseq.png' align='middle' title='Connection Failure Detector Sequence Diagram' width='600' height='600' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/cfdseq.png' align='middle' title='Connection Failure Detector Sequence Diagram' width='600' height='600' />
 
 <h4>Redundancy</h4>
 
 <b>NsRedundancy</b> encapsulates the redundancy logic, it communicates with other components through <i>Redundancy</i> port which accepts <i>Encode</i>/<i>Decode</i> requests and delivers <i>EncodeResp</i>/<i>DecodeResp</i> responses. currently NsRedundancy implements the redundancy logic using the onion network coders "Reed Solomon Codes".<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/redundancy.png' align='middle' title='NsRedundancy Component' width='320' height='160' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/redundancy.png' align='middle' title='NsRedundancy Component' width='320' height='160' />
 
 For the first time <i>Encode</i>/<i>Decode</i> event is triggered at the Redundancy port, the NsRedundancy will create an onion network PureCode<code>[2]</code> object according to the specified replication parameters and add that object to a map as shown in next table. after that, for all encode/decode events triggered again with the same parameters the NsRedundancy will use the existing coder instead of creating a new one.<br>
 <br>
@@ -91,35 +91,35 @@ NsStorageServer provides <i>SSStatus</i> port which accepts <i>SSStatusRequest</
 <b>NsBucketReader</b> accepts <i>RemoteRead</i> and <i>Close</i> events at the <i>Network</i> port and delivers <i>RemoteReadResponse</i>, <b>NsBucketWriter</b> accepts <i>RemoteWrite</i> and <i>Close</i> events at the <i>Network</i> port and delivers <i>RemoteWriteResponse</i>.<br>
 <br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/storageserver.png' align='middle' title='NsStorageServer Component' width='320' height='320' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/storageserver.png' align='middle' title='NsStorageServer Component' width='320' height='320' />
 
 <h4>Immutable Manager</h4>
 
 <b>NsImmutableManager</b> is responsible for creating/destroying uploaders and downloaders upon request at its provided <i>Immutable</i> port, also it carry information about current uploaders/downloaders.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/immmanager.png' align='middle' title='NsImmutableManager Component' width='640' height='480' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/immmanager.png' align='middle' title='NsImmutableManager Component' width='640' height='480' />
 
 <h5>Uploader</h5>
 
 <b>NsUploader</b> represents a single upload operation and it is initiated with the file handle of the file to be uploaded.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/immuploader.png' align='middle' title='NsUploader Component' width='400' height='280' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/immuploader.png' align='middle' title='NsUploader Component' width='400' height='280' />
 
 
 A sequence diagram of the main actions done during the upload process is described in next figure. Note that every status message returned from the NsWriteBucketProxy is evaluated to check BucketWriter failures but we didn't add them to the sequence diagram to make it clear.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/immuploaderseq.png' align='middle' title='Uploading Sequence diagram' width='800' height='600' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/immuploaderseq.png' align='middle' title='Uploading Sequence diagram' width='800' height='600' />
 
 <h6>Peer Selector</h6>
 
 <b>NsPeerSelector</b> is responsible for selecting the appropriate peers for the uploading process. NsPeerSelector is an abstraction for the peer selection process and it has different implementations, in case of using the Introducer node "centralized" then a <i>Tahoe2PeerSelector</i> algorithm is used otherwise in case of using Chord "decentralized" then a <i>ChordPeerSelector<code>[1]</code></i> is used.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/immpeerselector.png' align='middle' title='NsPeerSelector Component' width='320' height='240' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/immpeerselector.png' align='middle' title='NsPeerSelector Component' width='320' height='240' />
 
 
 Despite the used type of NsPeerSelector, a <b>NsPeerTracker</b> components are used where each NsPeerTracker is responsible for communicating with one storage server to ask about existing shares and/or to create new shares.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/peertracker.png' align='middle' title='NsPeerTracker Component' width='320' height='160' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/peertracker.png' align='middle' title='NsPeerTracker Component' width='320' height='160' />
 
 
 In Nilestore, we have different implementations of PeerSelectors; Tahoe2PeerSelector and ChordPeerSelector<code>[1]</code> which used in case of Chord ring overlay . ChordPeerSelection algorithm is inspired by the proposed Tahoe3PeerSelector algorithm and it's a gossip like algorithm where we ask random peers in the ring to hold the task of allocating a share for us either on their storage server or by propagating the request to other peers and finally returning back with a peer that accepted to hold that share. this algorithm theoretically could fit very well in large networks. In a decentralized version the <i>NsShareFinder</i> will use almost the same algorithm but instead of allocating a share it will search for a share.<br>
@@ -128,43 +128,43 @@ In Nilestore, we have different implementations of PeerSelectors; Tahoe2PeerSele
 
 <b>NsWriteBucketProxy</b> is responsible for writing share data on a storage server by communicating with NsBucketWriter component in the storage server. At the end of peer selection process the uploader will create a set of NsWriteBucketProxy components to pass their ids to the NsEncoder for further use.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/wbp.png' align='middle' title='NsWriteBucketProxy Component' width='400' height='240' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/wbp.png' align='middle' title='NsWriteBucketProxy Component' width='400' height='240' />
 
 <h6>Encoder</h6>
 
 <b>NsEncoder</b> is responsible for the actual uploading process where the file is encrypted, segmented and then adding redundant data using NsRedundancy, then sent to servers through the NsWriteBucketProxies created by the parent uploader. At the end of the process the Encoder will trigger an <i>EncoderDone</i> event holding the verifyCap of the uploaded file.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/encoder.png' align='middle' title='NsEncoder Component' width='320' height='160' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/encoder.png' align='middle' title='NsEncoder Component' width='320' height='160' />
 
 <h5>Downloader</h5>
 
 <b>NsDownloader</b> is responsible for a single download operation and it's initiated with the capability uri of the file to be downloaded. it holds the NsDownloadNode component which is responsible for the actual downloading process, the NsDownloader is just a wrapper for NsDownloadNode with a decryption key to decrypt validated segments gathered by the download node.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/nsdownloader.png' align='middle' title='NsDownloader Component' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/nsdownloader.png' align='middle' title='NsDownloader Component' />
 
 
 <b>NsDownloadNode</b> holds  a <i>DownloadCommon</i> object which holds the uri extension block(<b>UEB</b>), share hash tree, ciphertext hash tree and other parameters required to validate the shares.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/nsdownloadnode.png' align='middle' title='NsDownloadNode Component' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/nsdownloadnode.png' align='middle' title='NsDownloadNode Component' />
 
 
 Notice that in our current implementation we fetch the whole block hash tree and ciphertext hash tree which conflict with the use of merkle trees "validating random nodes on the tree" but it's implemented that way for simplicity we could improve that in later versions.<br>
 <br>
 check the sequence diagram of the download process in the next figure.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/downloadseq.png' align='middle' title='Downloading Sequence diagram' width='800' height='1000' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/downloadseq.png' align='middle' title='Downloading Sequence diagram' width='800' height='1000' />
 
 <h6>Share Finder</h6>
 
 <b>NsShareFinder</b> is responsible for locating shares on storage servers, it uses set of NsPeerTracker components to communicate with storage servers. it follows almost the same design as the share finder in Tahoe.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/immsharefinder.png' align='middle' title='NsShareFinder Component' width='320' height='240' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/immsharefinder.png' align='middle' title='NsShareFinder Component' width='320' height='240' />
 
 <h6>Bucket Reader</h6>
 
 <b>NsReadBucketProxy</b> is responsible for reading share data located on a storage server by communicating with NsBucketReader component in the storage server, also responsible for validating blocks data against their block hash tree. NsDownloader creates NsReadBucketProxy components every time it got <i>GotShares</i> event from the share finder, and passes their ids to the NsSegementFetcher.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/rbp.png' align='middle' title='NsReadBucketProxy Component' width='400' height='240' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/rbp.png' align='middle' title='NsReadBucketProxy Component' width='400' height='240' />
 
 
 After initiating a NsReadBucketProxy component it will request the header data of the share file it is responsible for and any requests triggered at <i>ReadBP</i> port before getting the header data will be postponed until getting the header data. NsDownloader will trigger <i>SetCommonParams</i> event on the <i>ReadBP</i> port of read bucket proxies who don't have the number of segments and the size of the tail block.<br>
@@ -175,47 +175,47 @@ When <i>GetBlock</i> is triggered the read bucket proxy will try to fetch the re
 
 <b>NsSegmentFetcher</b> is responsible for fetching segments upon request. NsDownloader will request segments from NsSegmentFetcher by triggering <i>GetSegment</i> on the <i>SegmentFetcher</i> port event. NsSegmentFetcher will triggers a <i>GetSegmentResponse</i> event when it got a segment. it follows almost the same design as segment fetcher in Tahoe but instead of creating a new segment fetcher for each segment we used it for all segments by tweaking the segment fetcher design.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/segmentfetcher.png' align='middle' title='NsSegmentFetcher Component' width='280' height='160' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/segmentfetcher.png' align='middle' title='NsSegmentFetcher Component' width='280' height='160' />
 
 <h4>Web Application</h4>
 
 <b>NsWebApplication</b> is responsible for handling web requests triggered at its <i>Web</i> port and figure which operation to be done; for example if operation is upload a file then NsWebApplication will trigger a <i>Upload</i> event at the <i>Immutable</i> port.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/webapp.png' align='middle' title='NsWebApplication Component' width='160' height='80' />
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/webapp.png' align='middle' title='NsWebApplication Component' width='160' height='80' />
 
 
 <h3>Introducer</h3>
 
 It is the entry point for new peers to discover already existing peers. It follows <b>Publish/Subscribe</b> pattern.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/introducer.png' align='middle' title='Introducer Node' width='320' height='240'>
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/introducer.png' align='middle' title='Introducer Node' width='320' height='240'>
 
 Introducer node has a NsIntroducerServer component which accepts <i>Publish</i> and <i>Subscribe</i> events through the <i>Network</i> port and delivers <i>Announce</i> event as shown in Figure below.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/nsintroducerserver.png' align='middle' title='Introducer Server' width='320' height='160'>
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/nsintroducerserver.png' align='middle' title='Introducer Server' width='320' height='160'>
 
 <h3>Monitor</h3>
 
 It is a server that collect data from peers whom enabled the monitoring feature in the grid, each peer will have a <b>NsMonitorClient</b> which communicates with other components inside the peer to get status then it will send a status every some period of time according to configuration to <b>NsMonitorServer</b>.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/monitor.png' align='middle' title='Monitor Node' width='320' height='240'>
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/monitor.png' align='middle' title='Monitor Node' width='320' height='240'>
 
 
 For our current implementation <b>NsMonitorClient</b> has a <i>SSStatus</i> port which used to get status information about storage server on each peer, all these information is sent to the <b>NsMonitorServer</b> which display these info in a visual representation. for now we have two visual representation; <b>Storage Matrix</b> which plot storage indeces against storage servers and display the count of shares as an intensity, and <b>Storage Grouped View</b> which plots the amount of contribution "<i>Used Space</i> and <i>Count of Shares</i>" by a storage node to the whole network.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/monitor1.png' align='middle' title='Example of Storage Matrix'>
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/monitor1.png' align='middle' title='Example of Storage Matrix'>
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/monitor2.png' align='middle' title='Example of Storage Grouped View'>
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/monitor2.png' align='middle' title='Example of Storage Grouped View'>
 
 <h3>Simulator</h3>
 
 Simulator is a node that creates a small-scale Nilestore grid in one java process, it has an interactive web interface to communicate with the grid as shown below. Kompics provides a <b>P2pOrchestrator</b> component which provides a <i>Network</i> and <i>Timer</i> ports and derives the execution from <i>Experiment</i> port.<br>
 <br>
-<img src='http://nilestore.googlecode.com/svn/wiki/img/simulator.png' align='middle' title='Simulator Node' width='320' height='240'>
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/simulator.png' align='middle' title='Simulator Node' width='320' height='240'>
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/nssimulator.png' align='middle' title='NsSimulator Component' width='320' height='240'>
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/nssimulator.png' align='middle' title='NsSimulator Component' width='320' height='240'>
 
-<img src='http://nilestore.googlecode.com/svn/wiki/img/simulatorinterface.png' align='middle' title='Simulator Web Interface'>
+<img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/simulatorinterface.png' align='middle' title='Simulator Web Interface'>
 
 
 <h2>Project Structure</h2>

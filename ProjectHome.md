@@ -7,6 +7,6 @@ check out our [GettingStarted](http://code.google.com/p/nilestore/wiki/GettingSt
 
 
 <table border='0'>
-<tr> <td> <a href='http://code.google.com/p/nilestore/wiki/TahoeLAFSBasics'> <img src='http://nilestore.googlecode.com/svn/wiki/img/immutablecaps.png' width='320' height='240' /> </a> </td>
-<td><a href='http://code.google.com/p/nilestore/wiki/NilestoreDesign'> <img src='http://nilestore.googlecode.com/svn/wiki/img/nspeer.png' width='320' height='240' /> </a></td></tr>
+<tr> <td> <a href='http://code.google.com/p/nilestore/wiki/TahoeLAFSBasics'> <img src='https://github.com/maismail/nilestore/raw/wiki/tahoe/immutablecaps.png' width='320' height='240' /> </a> </td>
+<td><a href='http://code.google.com/p/nilestore/wiki/NilestoreDesign'> <img src='https://github.com/maismail/nilestore/raw/wiki/nilestore/nspeer.png' width='320' height='240' /> </a></td></tr>
 <tr> <td align='middle'> <b> Immutable Capabilities </b> </td> <td align='middle'> <b> Nilestore Peer </b> </td> </tr>
